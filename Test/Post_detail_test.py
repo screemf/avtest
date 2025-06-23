@@ -173,6 +173,7 @@ def get_csrf_token_for_element(username, password, data_id):
 
     ]
 )
+@allure.epic("Тестирования конкретного поста")
 @allure.feature('Комментарии API')
 def test_add_reply(username, password, id_comm,without_csrf_mid):
     result = get_csrf_token_new_comm(username, password)
@@ -219,6 +220,7 @@ def test_add_reply(username, password, id_comm,without_csrf_mid):
 
     ]
 )
+@allure.epic("Тестирования конкретного поста")
 @allure.feature('Лайк комментария API')
 def test_like_comment(username, password, data_id):
     result = get_csrf_token_for_element(username, password, data_id)
@@ -279,6 +281,7 @@ def test_like_comment(username, password, data_id):
         ("admin", "000p;lko", 15, False),  # Ожидаем найти и удалить
     ]
 )
+@allure.epic("Тестирования конкретного поста")
 @allure.feature('Удаление комментария')
 def test_delete_comment(username, password, post_id_del, elses_comment):
     data_id = get_max_comment_id(post_id_del)
@@ -325,6 +328,8 @@ def test_delete_comment(username, password, post_id_del, elses_comment):
      ("Ostap", "000olkji", 16)
      ]
 )
+@allure.epic("Тестирования конкретного поста")
+@allure.feature('UI тест лайка комментария с API авторизацией')
 def test_like_comment_ui(username, password, post_id):
     driver = webdriver.Chrome()
     driver.implicitly_wait(5)
@@ -355,7 +360,6 @@ def test_like_comment_ui(username, password, post_id):
             allure.attach(driver.get_screenshot_as_png(), name="Страница поста",
                           attachment_type=allure.attachment_type.PNG)
 
-            # 3. Получение начального количества лайков
         with allure.step("Получение начального количества лайков"):
             like_button = driver.find_element(By.CSS_SELECTOR, ".like-comment")
             current_like = int(''.join(filter(str.isdigit, like_button.text or '0')))
@@ -363,14 +367,12 @@ def test_like_comment_ui(username, password, post_id):
                           name="Начальное значение",
                           attachment_type=allure.attachment_type.TEXT)
 
-            # 4. Нажатие кнопки лайка
         with allure.step("Нажатие кнопки лайка"):
             like_button.click()
-            time.sleep(3)  # Фиксированная задержка
+            time.sleep(3)
             allure.attach(driver.get_screenshot_as_png(), name="После нажатия",
                           attachment_type=allure.attachment_type.PNG)
 
-            # 5. Получение конечного количества лайков
         with allure.step("Проверка изменения счетчика"):
             final_like = int(''.join(filter(str.isdigit, like_button.text or '0')))
             allure.attach(f"Конечное количество лайков: {final_like}",

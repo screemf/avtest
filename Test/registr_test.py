@@ -9,6 +9,7 @@ import string
 URL_REGISTR = "http://127.0.0.1:8000/user/registr/"
 URL_HOME = "http://127.0.0.1:8000/blog/home/"
 
+@allure.epic('Регистрация')
 @allure.feature("Регистрация пользователя - позитивный")
 def test_registration():
     driver = webdriver.Chrome()
@@ -44,7 +45,7 @@ def test_registration():
     finally:
         driver.quit()
 
-
+@allure.epic('Регистрация')
 @allure.feature("Регистрация пользователя - негативный(неверный повтор пароля)")
 def test_registration_negative_repear_pass():
     driver = webdriver.Chrome()
@@ -80,6 +81,7 @@ def test_registration_negative_repear_pass():
     finally:
         driver.quit()
 
+@allure.epic('Регистрация')
 @allure.feature("Регистрация пользователя - негативный(Валидация пароля)")
 def test_registration_no_valid_pass():
     driver = webdriver.Chrome()

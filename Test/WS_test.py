@@ -6,6 +6,8 @@ from websockets.exceptions import ConnectionClosedError
 
 WS_URL_POSTS = 'ws://localhost:8000/ws/posts/'
 WS_URL_POST = 'ws://localhost:8000/ws/comments/15/'
+
+@allure.epic('WS')
 @allure.feature('WebSocket создание поста')
 async def test_websocket_notification():
     websocket_url =  WS_URL_POSTS
@@ -31,12 +33,11 @@ async def test_websocket_notification():
 
     assert message_received, "Не удалось получить сообщение через WebSocket"
 
-# Обертка для запуска асинхронного теста
-
+@allure.epic('WS')
 @allure.feature('WebSocket создание комментария')
 async def test_websocket_notification_post_id():
     websocket_url = WS_URL_POST
-    timeout = 100  # seconds
+    timeout = 100
     message_received = False
 
     with allure.step(f"Установка WebSocket соединения с {websocket_url}"):
@@ -57,7 +58,3 @@ async def test_websocket_notification_post_id():
             pytest.fail(f"Ошибка соединения: {str(e)}")
 
     assert message_received, "Не удалось получить сообщение через WebSocket"
-
-def test_websocket_wrapper():
-   # """Обертка для запуска асинхронного теста"""
-    asyncio.get_event_loop().run_until_complete(test_websocket_notification())

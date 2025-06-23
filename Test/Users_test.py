@@ -21,6 +21,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
     ]
 )
+@allure.epic('Пользователи')
 @allure.feature('API: Обновление профиля')
 def test_update_profile(username, password, url_suffix,elses_profile):
     auth_cookies, sessionid = get_auth_tokens(username, password)
@@ -75,6 +76,7 @@ def test_update_profile(username, password, url_suffix,elses_profile):
         ("test_123", "000P;lko", "24"),
     ]
 )
+@allure.epic('Пользователи')
 @allure.feature('UI: Обновление профиля через API авторизацию')
 def test_ui_update_profile_with_api_auth(username, password, url_suffix):
     driver = webdriver.Chrome()
