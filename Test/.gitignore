@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.swp
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Selenium
+*.log
+geckodriver.log
+chromedriver.log
+
+# Allure
+allure-results/
+allure-report/
+
+# OS
+.DS_Store
+Thumbs.db
