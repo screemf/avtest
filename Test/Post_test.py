@@ -88,7 +88,6 @@ def get_csrf_token_delete(username, password, post_id):
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Ищем input с именем csrfmiddlewaretoken внутри формы
     csrf_input = soup.find('input', {'name': 'csrfmiddlewaretoken'})
 
     if csrf_input and csrf_input.get('value'):

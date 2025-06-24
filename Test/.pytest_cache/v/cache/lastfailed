@@ -47,8 +47,8 @@
   "Post_test.py::test_create_post_1[test_no_avtor-000p;lko-False]": true,
   "Post_test.py::test_create_post_1[Ostap-000olkji-False]": true,
   "Post_test.py::test_delete_post[test_no_avtor-000p;lko-False]": true,
-  "Post_test.py::test_delete_post[Ostap-000olkji-False]": true,
   "Post_detail_test.py": true,
   "Post_detail_test.py::test_like_comment_request_count[Ostap-000olkji]": true,
-  "Post_detail_test.py::test_like_comment_request_count[Ostap-000olkji-16]": true
+  "Post_detail_test.py::test_like_comment_request_count[Ostap-000olkji-16]": true,
+  "Post_test.py::test_delete_post[Ostap-000olkji-False]": true
 }

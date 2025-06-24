@@ -11,7 +11,7 @@ WS_URL_POST = 'ws://localhost:8000/ws/comments/15/'
 @allure.feature('WebSocket создание поста')
 async def test_websocket_notification():
     websocket_url =  WS_URL_POSTS
-    timeout = 100  # seconds
+    timeout = 100
     message_received = False
 
     with allure.step(f"Установка WebSocket соединения с {websocket_url}"):
