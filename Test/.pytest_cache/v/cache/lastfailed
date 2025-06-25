@@ -42,7 +42,6 @@
   "Post_detail.py::test_delete_comment[Ostap-000olkji-15_1]": true,
   "Auth_test_finish.py::test_authorization_redirect": true,
   "Auth_test.py::test_logout_and_access[admin-000p;lko]": true,
-  "Auth_test.py::test_authorization_redirect": true,
   "Post_test.py::test_create_post_1[admin-000p;lko-True]": true,
   "Post_test.py::test_create_post_1[test_no_avtor-000p;lko-False]": true,
   "Post_test.py::test_create_post_1[Ostap-000olkji-False]": true,
@@ -50,5 +49,8 @@
   "Post_detail_test.py": true,
   "Post_detail_test.py::test_like_comment_request_count[Ostap-000olkji]": true,
   "Post_detail_test.py::test_like_comment_request_count[Ostap-000olkji-16]": true,
-  "Post_test.py::test_delete_post[Ostap-000olkji-False]": true
+  "Post_test.py::test_delete_post[Ostap-000olkji-False]": true,
+  "Post_detail_test.py::test_like_comment_ui[Ostap-000olkji-16_0]": true,
+  "Post_detail_test.py::test_like_comment_ui[Ostap-000olkji-16_1]": true,
+  "Post_test.py::test_delete_post[admin-000p;lko-True]": true
 }
