@@ -16,4 +16,7 @@ RUN pip install --no-cache-dir -r clean_requirements.txt
 
 COPY . .
 
+ENV TEST_TARGET_URL=http://127.0.0.1:8000/blog/home/
+ENV PYTHONPATH=/app
+
 CMD ["python", "runner.py"]

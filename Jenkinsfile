@@ -2,56 +2,67 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "my-app"
-        DOCKER_TAG = "${env.BUILD_NUMBER}"
-        CONTAINER_NAME = "my-app"
-        APP_PORT = "5000" // Укажите нужный порт вашего приложения
+        // Настройки тестового раннера
+        TEST_IMAGE = "my-app"
+        TEST_TAG = "${env.BUILD_NUMBER}"
+
+        // URL тестируемого приложения (можно задавать через параметры)
+        TEST_TARGET_URL = "http://127.0.0.1:8000/blog/home"
     }
 
     stages {
-        stage('Build Docker Image') {
+        stage('Prepare Test Environment') {
             steps {
                 script {
-                    // Собираем Docker-образ
-                    docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                    // Можно добавить проверку доступности тестируемого приложения
+                    sh """
+                        if ! curl --output /dev/null --silent --head --fail "${TEST_TARGET_URL}"; then
+                            echo "Тестируемое приложение не доступно по адресу ${TEST_TARGET_URL}"
+                            exit 1
+                        fi
+                    """
                 }
             }
         }
 
-        stage('Run Application') {
+        stage('Run Tests') {
             steps {
                 script {
-                    // Останавливаем и удаляем предыдущий контейнер, если есть
-                    sh "docker stop ${CONTAINER_NAME} || true"
-                    sh "docker rm ${CONTAINER_NAME} || true"
+                    try {
+                        // Запускаем тестовый контейнер и передаем URL тестируемого приложения
+                        sh """
+                        docker run --rm \
+                            -e TEST_TARGET_URL=${TEST_TARGET_URL} \
+                            ${TEST_IMAGE}:${TEST_TAG} \
+                            pytest -n 3 --alluredir=./allure-results
+                        """
+                    } finally {
+                        // Сохраняем результаты тестов
+                        archiveArtifacts artifacts: '**/allure-results/**', allowEmptyArchive: true
+                    }
+                }
+            }
+        }
 
-                    // Запускаем новый контейнер
+        stage('Generate Report') {
+            steps {
+                script {
+                    // Генерируем Allure отчет
+                    allureCommandline = tool name: 'allure-commandline', type: 'io.qameta.allure.jenkins.tools.AllureCommandlineInstaller'
                     sh """
-                    docker run -d \
-                        --name ${CONTAINER_NAME} \
-                        -p ${APP_PORT}:${APP_PORT} \
-                        ${DOCKER_IMAGE}:${DOCKER_TAG}
+                    ${allureCommandline}/bin/allure generate allure-results -o allure-report
                     """
-
-                    // Ждем запуска приложения
-                    sleep(time: 5, unit: 'SECONDS')
-
-                    // Проверяем, что контейнер запущен
-                    sh "docker ps | grep ${CONTAINER_NAME}"
                 }
             }
         }
     }
 
     post {
-        success {
-            echo "Приложение успешно запущено и доступно по адресу:"
-            echo "http://localhost:${APP_PORT}"
-            echo "Или используйте: docker logs ${CONTAINER_NAME}"
-        }
-        failure {
-            echo "Ошибка при запуске приложения"
-            sh "docker logs ${CONTAINER_NAME} || true"
+        always {
+            allure includeProperties: false,
+                   jdk: '',
+                   results: [[path: 'allure-results']]
+
         }
     }
 }
