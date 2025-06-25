@@ -8,18 +8,26 @@ pipeline {
 
         // URL тестируемого приложения (можно задавать через параметры)
         TEST_TARGET_URL = "http://127.0.0.1:8000/blog/home"
+
+        // Время ожидания перед проверкой (в секундах)
+        WAIT_TIME = "180" // 3 минуты = 180 секунд
     }
 
     stages {
         stage('Prepare Test Environment') {
             steps {
                 script {
-                    // Можно добавить проверку доступности тестируемого приложения
+                    // Добавляем ожидание перед проверкой
+                    echo "Ожидаем ${WAIT_TIME} секунд перед проверкой доступности приложения..."
+                    sleep(time: WAIT_TIME.toInteger(), unit: 'SECONDS')
+
+                    // Проверка доступности тестируемого приложения
                     sh """
                         if ! curl --output /dev/null --silent --head --fail "${TEST_TARGET_URL}"; then
                             echo "Тестируемое приложение не доступно по адресу ${TEST_TARGET_URL}"
                             exit 1
                         fi
+                        echo "Приложение успешно доступно по адресу ${TEST_TARGET_URL}"
                     """
                 }
             }
@@ -62,7 +70,6 @@ pipeline {
             allure includeProperties: false,
                    jdk: '',
                    results: [[path: 'allure-results']]
-
         }
     }
 }
