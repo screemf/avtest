@@ -21,7 +21,6 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Первый набор тестов (параллельный)
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                         sh """
                         pytest WS_test.py Post_test.py Post_detail_test.py \
@@ -29,8 +28,6 @@ pipeline {
                             --alluredir=${ALLURE_RESULTS}
                         """
                     }
-
-                    // Второй набор тестов
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                         sh """
                         pytest Auth_test.py Users_test.py registr_test.py \
@@ -41,10 +38,9 @@ pipeline {
             }
         }
 
-        stage('Генерируем отчет') {
+        stage('Generate Allure Report') {
             steps {
                 script {
-                    // Всегда генерируем отчёт, даже если тесты упали
                     sh "allure serve ${ALLURE_RESULTS} || true"
                 }
             }
@@ -73,12 +69,6 @@ pipeline {
             echo "Allure отчёт был доступен во время выполнения"
             echo "Приложение запущено на порту: ${APP_PORT}"
             echo "Для просмотра логов: docker logs ${CONTAINER_NAME}"
-            allowMissing: false,
-            alwaysLinkToLastBuild: true,
-            keepAll: true,
-            reportDir: 'allure-report',
-            reportFiles: 'index.html',
-            reportName: 'Allure Report'
         }
         success {
             echo "Pipeline завершён успешно (приложение запущено)"
