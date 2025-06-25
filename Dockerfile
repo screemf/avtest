@@ -71,5 +71,7 @@ COPY . .
 
 ENV TEST_TARGET_URL=http://127.0.0.1:8000/blog/home/
 ENV PYTHONPATH=/app
+ENV DISPLAY=:99
+ENV PATH="/usr/local/bin:${PATH}"
 
 CMD ["python", "runner.py"]
