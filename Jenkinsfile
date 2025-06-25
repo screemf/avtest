@@ -54,3 +54,4 @@ pipeline {
             sh "docker logs ${CONTAINER_NAME} || true"
         }
     }
+}
