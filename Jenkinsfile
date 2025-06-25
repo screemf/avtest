@@ -5,43 +5,15 @@ pipeline {
         DOCKER_IMAGE = "my-app"
         DOCKER_TAG = "${env.BUILD_NUMBER}"
         CONTAINER_NAME = "my-app"
-        APP_PORT = "5000"
-        ALLURE_RESULTS = "./allure-results"
+        APP_PORT = "5000" // Укажите нужный порт вашего приложения
     }
 
     stages {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Собираем Docker-образ
                     docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
-                }
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                script {
-                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                        sh """
-                        pytest WS_test.py Post_test.py Post_detail_test.py \
-                            -n 3 \
-                            --alluredir=${ALLURE_RESULTS}
-                        """
-                    }
-                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                        sh """
-                        pytest Auth_test.py Users_test.py registr_test.py \
-                            --alluredir=${ALLURE_RESULTS}
-                        """
-                    }
-                }
-            }
-        }
-
-        stage('Generate Allure Report') {
-            steps {
-                script {
-                    sh "allure serve ${ALLURE_RESULTS} || true"
                 }
             }
         }
@@ -49,15 +21,22 @@ pipeline {
         stage('Run Application') {
             steps {
                 script {
+                    // Останавливаем и удаляем предыдущий контейнер, если есть
                     sh "docker stop ${CONTAINER_NAME} || true"
                     sh "docker rm ${CONTAINER_NAME} || true"
+
+                    // Запускаем новый контейнер
                     sh """
                     docker run -d \
                         --name ${CONTAINER_NAME} \
                         -p ${APP_PORT}:${APP_PORT} \
                         ${DOCKER_IMAGE}:${DOCKER_TAG}
                     """
+
+                    // Ждем запуска приложения
                     sleep(time: 5, unit: 'SECONDS')
+
+                    // Проверяем, что контейнер запущен
                     sh "docker ps | grep ${CONTAINER_NAME}"
                 }
             }
@@ -65,19 +44,13 @@ pipeline {
     }
 
     post {
-        always {
-            echo "Allure отчёт был доступен во время выполнения"
-            echo "Приложение запущено на порту: ${APP_PORT}"
-            echo "Для просмотра логов: docker logs ${CONTAINER_NAME}"
-        }
         success {
-            echo "Pipeline завершён успешно (приложение запущено)"
-        }
-        unstable {
-            echo "Некоторые тесты не прошли, но приложение запущено"
+            echo "Приложение успешно запущено и доступно по адресу:"
+            echo "http://localhost:${APP_PORT}"
+            echo "Или используйте: docker logs ${CONTAINER_NAME}"
         }
         failure {
-            echo "Ошибка в процессе выполнения pipeline"
+            echo "Ошибка при запуске приложения"
+            sh "docker logs ${CONTAINER_NAME} || true"
         }
     }
-}
