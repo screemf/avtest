@@ -1,5 +1,6 @@
 FROM python:3.10-slim
 
+# Установка системных зависимостей
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
@@ -8,8 +9,9 @@ RUN apt-get update && \
     libssl-dev \
     curl \
     wget \
+    unzip \
     gnupg \
-    # Для Chrome
+    # Зависимости для Chrome
     fonts-liberation \
     libasound2 \
     libatk-bridge2.0-0 \
@@ -45,20 +47,22 @@ RUN apt-get update && \
     lsb-release \
     xdg-utils \
     # Установка Chrome
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
+    && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update \
     && apt-get install -y google-chrome-stable \
     # Очистка
     && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /etc/apt/sources.list.d/google.list
+    && apt-get autoremove -y \
+    && apt-get clean
 
-# Установка ChromeDriver (версия должна соответствовать Chrome)
-RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1) \
-    && CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
+# Установка ChromeDriver
+RUN CHROME_MAJOR_VERSION=$(google-chrome-stable --version | sed -E 's/.* ([0-9]+)\..*/\1/') \
+    && CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_MAJOR_VERSION}) \
     && wget -q https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip \
     && unzip chromedriver_linux64.zip \
     && mv chromedriver /usr/local/bin/ \
+    && chmod +x /usr/local/bin/chromedriver \
     && rm chromedriver_linux64.zip
 
 WORKDIR /app
@@ -71,7 +75,11 @@ COPY . .
 
 ENV TEST_TARGET_URL=http://127.0.0.1:8000/blog/home/
 ENV PYTHONPATH=/app
-ENV DISPLAY=:99
 ENV PATH="/usr/local/bin:${PATH}"
+
+# Для headless Chrome
+ENV DISPLAY=:99
+ENV CHROME_BIN=/usr/bin/google-chrome-stable
+ENV CHROMEDRIVER_PATH=/usr/local/bin/chromedriver
 
 CMD ["python", "runner.py"]
