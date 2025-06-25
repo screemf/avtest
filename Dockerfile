@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir -r clean_requirements.txt
 
 COPY . .
 
-CMD ["python", "app.py"]
+CMD ["python", "runner.py"]
