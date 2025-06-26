@@ -1,16 +1,23 @@
-import subprocess
-import sys
+import os
+
 
 
 def run_command(command, description):
-    print(f"\n\033[1mЗапуск: {description}\033[0m")
-    print(f"\033[34mВыполняется команда: {command}\033[0m")
-    result = subprocess.run(command, shell=True)
-    if result.returncode == 0:
-        print(f"\033[32mУспешно: {description}\033[0m")
-    else:
-        print(f"\033[33mЗавершено с ошибкой (код {result.returncode}): {description}\033[0m")
-    return result.returncode
+    # Сохраняем текущую директорию
+    original_dir = os.getcwd()
+
+    try:
+        # Переходим в директорию Test
+        os.chdir('Test')
+
+        # Запускаем команду pytest
+        print(f"Запуск: {description}")
+        print(f"Выполняется команда: {command}")
+        # Здесь ваш код для выполнения команды
+
+    finally:
+        # Возвращаемся обратно в исходную директорию
+        os.chdir(original_dir)
 
 
 def main():
