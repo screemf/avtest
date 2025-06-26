@@ -284,7 +284,8 @@ def test_ui_create_post_with_api_auth(username, password):
         category_input.send_keys("Тестовая категория UI")
 
         image_input = driver.find_element(By.ID, "id_image")
-        image_path = "D:/photo_2024-11-15_14-27-02.jpg"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        image_path = os.path.join(current_dir, "test_data", "Refer.png")
         image_input.send_keys(image_path)
         time.sleep(2)
         submit_button = wait.until(EC.element_to_be_clickable(
