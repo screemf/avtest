@@ -2,6 +2,7 @@ import subprocess
 import sys
 
 
+
 def run_command(command, description):
     print(f"\n\033[1mЗапуск: {description}\033[0m")
     print(f"\033[34mВыполняется команда: {command}\033[0m")
