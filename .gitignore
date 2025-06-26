@@ -16,7 +16,7 @@ geckodriver.log
 chromedriver.log
 
 # Allure
-allure-results/
+Test/allure-results/
 allure-report/
 
 # OS
