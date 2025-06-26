@@ -4,8 +4,8 @@ import websockets
 import asyncio
 from websockets.exceptions import ConnectionClosedError
 
-WS_URL_POSTS = 'ws://localhost:8000/ws/posts/'
-WS_URL_POST = 'ws://localhost:8000/ws/comments/15/'
+WS_URL_POSTS = 'ws://django-blogapp:8000/ws/posts/'
+WS_URL_POST = 'ws://django-blogapp:8000/ws/comments/15/'
 
 @allure.epic('WS')
 @allure.feature('WebSocket создание поста')

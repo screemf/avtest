@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
+BASE_URL='django-blogapp'
 
 @pytest.mark.parametrize(
     "username, password, url_suffix, elses_profile",
@@ -26,7 +27,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 def test_update_profile(username, password, url_suffix,elses_profile):
     auth_cookies, sessionid = get_auth_tokens(username, password)
 
-    update_url = f'http://127.0.0.1:8000/user/profile/update/{url_suffix}'
+    update_url = f'http://django-blogapp/user/profile/update/{url_suffix}'
 
     headers = {
         'Accept': 'application/x-www-form-urlencoded',
@@ -86,18 +87,18 @@ def test_ui_update_profile_with_api_auth(username, password, url_suffix):
         auth_cookies, sessionid = get_auth_tokens(username, password)
         csrftoken = auth_cookies.get('csrftoken', '')
 
-        driver.get('http://127.0.0.1:8000/blog/home')
+        driver.get(f'http://{BASE_URL}:8000/blog/home')
 
         driver.add_cookie({
             'name': 'sessionid',
             'value': sessionid,
-            'domain': '127.0.0.1',
+            'domain': 'django-blogapp',
             'path': '/',
         })
         driver.add_cookie({
             'name': 'csrftoken',
             'value': csrftoken,
-            'domain': '127.0.0.1',
+            'domain': 'django-blogapp',
             'path': '/',
         })
 
@@ -139,10 +140,10 @@ def test_ui_update_profile_with_api_auth(username, password, url_suffix):
             actions.move_to_element(apply_button).click().perform()
 
             wait = WebDriverWait(driver, 10)
-            wait.until(EC.url_to_be('http://127.0.0.1:8000/user/users/'))
+            wait.until(EC.url_to_be(f'http://{BASE_URL}:8000/user/users/'))
 
-            assert driver.current_url == 'http://127.0.0.1:8000/user/users/', \
-                f"Ожидался переход на http://127.0.0.1:8000/user/users/, но текущий URL: {driver.current_url}"
+            assert driver.current_url == f'http://{BASE_URL}:8000/user/users/', \
+                f"Ожидался переход на http://{BASE_URL}:8000/user/users/, но текущий URL: {driver.current_url}"
     finally:
         driver.quit()
 

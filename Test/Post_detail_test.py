@@ -13,8 +13,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-BASE_URL = 'http://127.0.0.1:8000'
-URL_POST_ID = 'http://127.0.0.1:8000/blog/post/15/'
+BASE_URL = 'http://django-blogapp'
+URL_POST_ID = 'http://django-blogapp/blog/post/15/'
 
 
 
@@ -344,13 +344,13 @@ def test_like_comment_ui(username, password, post_id):
             driver.add_cookie({
                 'name': 'sessionid',
                 'value': sessionid,
-                'domain': '127.0.0.1',
+                'domain': 'django-blogapp',
                 'path': '/',
             })
             driver.add_cookie({
                 'name': 'csrftoken',
                 'value': csrftoken,
-                'domain': '127.0.0.1',
+                'domain': 'django-blogapp',
                 'path': '/',
             })
             driver.refresh()

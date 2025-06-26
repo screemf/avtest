@@ -6,8 +6,8 @@ import time
 import random
 import string
 
-URL_REGISTR = "http://127.0.0.1:8000/user/registr/"
-URL_HOME = "http://127.0.0.1:8000/blog/home/"
+URL_REGISTR = "http://django-blogapp:8000/user/registr/"
+URL_HOME = "http://django-blogapp:8000/blog/home/"
 
 @allure.epic('Регистрация')
 @allure.feature("Регистрация пользователя - позитивный")

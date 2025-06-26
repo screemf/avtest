@@ -47,7 +47,10 @@ RUN apt-get update && \
         libxtst6 \
         lsb-release \
         xdg-utils && \
-    rm -rf /var/lib/apt/lists/*
+           && apt-get autoclean \
+    && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/*
+
 
 # Установка последней стабильной версии Chrome
 RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google-chrome.gpg && \

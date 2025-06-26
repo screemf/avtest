@@ -13,10 +13,10 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-BASE_URL = 'http://127.0.0.1:8000'
-API_POSTS_LIST = 'http://127.0.0.1:8000/blog/posts/'
-API_CREATE_POST_URL = 'http://127.0.0.1:8000/blog/post/new'
-API_BLOG_HOME = 'http://127.0.0.1:8000/blog/home/'
+BASE_URL = 'http://django-blogapp:8000'
+API_POSTS_LIST = 'http://django-blogapp:8000/blog/posts/'
+API_CREATE_POST_URL = 'http://django-blogapp:8000/blog/post/new'
+API_BLOG_HOME = 'http://django-blogapp:8000/blog/home/'
 BASE_DIR = os.getcwd()
 REFERENCE_SCREENSHOT_PATH = os.path.join(BASE_DIR, "D:\Refer.png")
 CURRENT_SCREENSHOT_PATH = os.path.join(BASE_DIR, "D:\current_screenshot.png")
@@ -330,14 +330,14 @@ def test_ui_create_post_with_api_auth_without_image(username, password):
         driver.add_cookie({
             'name': 'sessionid',
             'value': sessionid,
-            'domain': '127.0.0.1',
+            'domain': 'django-blogapp',
             'path': '/',
         })
         if csrftoken:
             driver.add_cookie({
                 'name': 'csrftoken',
                 'value': csrftoken,
-                'domain': '127.0.0.1',
+                'domain': 'django-blogapp',
                 'path': '/',
             })
 
@@ -411,7 +411,7 @@ def test_like_post(username, password, post_id):
 
     with allure.step("Отправляем POST-запрос для лайка"):
         response = session.post(
-            f'http://127.0.0.1:8000/blog/like-post/{post_id}/',
+            f'http://{BASE_URL}:8000/blog/like-post/{post_id}/',
             headers={**headers, 'X-CSRFToken': csrf_token},
             data=data
         )
@@ -421,7 +421,7 @@ def test_like_post(username, password, post_id):
         current_likes = response_json.get('likes')
         with allure.step("Отправляем POST-запрос для лайка повторно"):
             response = session.post(
-                f'http://127.0.0.1:8000/blog/like-post/{post_id}/',
+                f'http://{BASE_URL}:8000/blog/like-post/{post_id}/',
                 headers={**headers, 'X-CSRFToken': csrf_token},
                 data=data
             )
@@ -434,7 +434,7 @@ def test_like_post(username, password, post_id):
 
         with allure.step("Отправляем POST-запрос для лайка повторно_2"):
             response = session.post(
-                f'http://127.0.0.1:8000/blog/like-post/{post_id}/',
+                f'http://{BASE_URL}:8000/blog/like-post/{post_id}/',
                 headers={**headers, 'X-CSRFToken': csrf_token},
                 data=data
             )
@@ -469,13 +469,13 @@ def test_like_button_increments(username, password):
         driver.add_cookie({
             'name': 'sessionid',
             'value': sessionid,
-            'domain': '127.0.0.1',
+            'domain': f'{BASE_URL}',
             'path': '/',
         })
         driver.add_cookie({
             'name': 'csrftoken',
             'value': csrftoken,
-            'domain': '127.0.0.1',
+            'domain': f'{BASE_URL}',
             'path': '/',
         })
 

@@ -6,10 +6,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 
-URL_LOGIN = 'http://0.0.0.0:8000/user/login/'
-BASE_URL = 'http://0.0.0.0:8000'
-PROTECTED_GET = 'http://0.0.0.0:8000/blog/post/new'
-URL_HOME = 'http://0.0.0.0:8000/blog/home/'
+URL_LOGIN = 'http://django-blogapp:8000/user/login/'
+BASE_URL = 'http://django-blogapp:8000'
+PROTECTED_GET = 'http://django-blogapp:8000/blog/post/new'
+URL_HOME = 'http://django-blogapp:8000/blog/home/'
 
 def get_auth_tokens(username, password):
     session = requests.Session()
