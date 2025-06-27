@@ -12,6 +12,8 @@ RUN apt-get update && \
         unzip \
         gnupg \
         jq \
+        beautifulsoup4 \
+        opencv-python \
         # Зависимости для Chrome
         fonts-liberation \
         libasound2 \
