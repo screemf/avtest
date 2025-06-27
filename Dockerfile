@@ -12,8 +12,6 @@ RUN apt-get update && \
         unzip \
         gnupg \
         jq \
-        beautifulsoup4 \
-        opencv-python \
         # Зависимости для Chrome
         fonts-liberation \
         libasound2 \
@@ -47,6 +45,7 @@ RUN apt-get update && \
         libxrender1 \
         libxss1 \
         libxtst6 \
+        allure \
         lsb-release \
         xdg-utils && \
         apt-get autoclean &&\
@@ -79,7 +78,8 @@ WORKDIR /app
 COPY clean_requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r clean_requirements.txt
+    pip install --no-cache-dir -r clean_requirements.txt && \
+    pip install --no-cache-dir allure-pytest beautifulsoup4 opencv-python selenium anyio pytest-asyncio pytest-tornasync  pytest-trio  pytest-twisted
 
 # Копируем остальные файлы
 COPY . .
@@ -94,5 +94,6 @@ ENV TEST_TARGET_URL=http://127.0.0.1:8000/blog/home/ \
     # Оптимизация для Selenium
     PYTHONUNBUFFERED=1 \
     LANG=C.UTF-8
+WORKDIR /app/Test
 
-CMD ["python", "runner.py"]
+CMD ["sh", "-c", "sleep 40 && python runner.py"]
