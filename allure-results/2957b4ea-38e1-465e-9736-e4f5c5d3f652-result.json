@@ -1,0 +1,1 @@
+{"name": "test_websocket_notification", "status": "passed", "steps": [{"name": "Установка WebSocket соединения с ws://django-blogapp:8000/ws/posts/", "start": 1751004115604}], "start": 1751004115599, "stop": 1751004118979, "uuid": "df6e88d0-a581-41df-9c17-66c3650306af", "testCaseId": "705c3129a9d279575141f39941f112b4", "fullName": "WS_test#test_websocket_notification"}
