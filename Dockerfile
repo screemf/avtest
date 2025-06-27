@@ -47,9 +47,9 @@ RUN apt-get update && \
         libxtst6 \
         lsb-release \
         xdg-utils && \
-           && apt-get autoclean \
-    && apt-get autoremove \
-    && rm -rf /var/lib/apt/lists/*
+        apt-get autoclean &&\
+        apt-get autoremove &&\
+        rm -rf /var/lib/apt/lists/*
 
 
 # Установка последней стабильной версии Chrome
