@@ -12,12 +12,8 @@ Instalation
 Python 3.10.12
 Cписок пакетов в файле requirements.txt
 Как запустить:
-Запускаем тесты связанные с WS вместе с тестами связанными с постами и конкретным постом в 3 потока:
-pytest WS_test.py Post_test.py Post_detail_test.py  -n 3 --alluredir=./allure-results
-Далее запускаем остальные тесты (тут можно в 1 поток):
-pytest Auth_test.py Users_test.py registr_test.py --alluredir=./allure-results
-Далее выгружаем отчет и открываем результаты тестирования:
-allure serve ./allure-results
+Собираем локальный образ этого приложения в контейнер "my-app-fr"
+В Jenkins - указываем в найстроках pipline script from SCM = Git выбираем в качестве репозитроия основное прложение
 #######################################
 #Примечание1: данные пакеты необходимы для запуска данных тестов и приложения blogapp
 #Примечание2: в самом приложение blogapp нет нормального README нужен пустой 6379 порт под redis - запускается: python manage.py runserver
